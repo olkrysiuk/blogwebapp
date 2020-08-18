@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3" lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Blog Web App - User notes</title>
+
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link th:href="@{/css/user-notes.css}" rel="stylesheet">
+
+</head>
+
+<body style="padding-top: 56px;">
+<!-- Navigation -->
+<div th:insert="common/navbar.html :: navbar-home"></div>
+<!-- Page Content -->
+<div class="container">
+
+    <div class="row">
+
+        <!-- Blog Entries Column -->
+        <div class="col-md-8">
+
+            <h2 class="my-4">[[${user.username}]]'s notes</h2>
+
+            <!-- Blog Post -->
+                <div th:each="note : ${notes}" class="card mb-4">
+                    <div th:if="${note.filename}">
+                        <img class="card-img-top" th:src="@{'/img/' + ${note.filename}}" alt="Card image cap">
+                    </div>
+                    <div class="card-body">
+                        <h3 th:text="${note.title}" class="card-title"></h3>
+                        <p>Tags: <span th:text="${note.tag}" class="card-text"></span></p>
+                        <a th:href="'note' + '/' + ${note.id}" class="btn btn-primary">Read more &rarr;</a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <p>Author: <span th:text="${note.getAuthorName()}" class="card-text"></span></p>
+                    </div>
+                </div>
+
+            <!-- Pagination -->
+            <ul class="pagination justify-content-center mb-4">
+                <li class="page-item"><a class="page-link" th:href="'/user-notes/' + ${url} + '?page=0'">First</a></li>
+                <li th:if="${notes.hasPrevious()}" class="page-item">
+                    <a class="page-link" th:href="'/user-notes/' + ${url} + '?page=' + ${notes.getNumber() - 1}">< Previous</a>
+                </li>
+                <li th:if="${notes.hasNext()}" class="page-item">
+                    <a class="page-link" th:href="'/user-notes/' + ${url} + '?page=' + ${notes.getNumber() + 1}">Next ></a>
+                </li>
+                <li class="page-item"><a class="page-link" th:href="'/user-notes/' + ${url} + '?page=' + ${notes.getTotalPages() - 1}">Last</a></li>
+            </ul>
+        </div>
+
+        <!-- Sidebar Widgets Column -->
+        <div class="col-md-4">
+
+            <!-- Search Widget -->
+
+            <!-- Categories Widget -->
+            <div class="card my-4">
+                <h5 class="card-header">Control panel</h5>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <ul class="list-unstyled mb-0">
+                                <li>
+                                    <a th:if="${user.isAdmin()}" th:href="@{/user-list}">Access manager</a>
+                                </li>
+                                <li>
+                                    <a  th:href="@{/profile}">User profile</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Side Widget -->
+            <div class="card my-4">
+                <h5 class="card-header">Tips</h5>
+                <div class="card-body">
+                    Verify your email, and get access to full version of our app!
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- /.row -->
+
+</div>
+<!-- /.container -->
+
+<!-- Footer -->
+<div th:insert="common/footer.html :: footer"></div>
+
+<!-- Bootstrap core JavaScript -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+</body>
+
+</html>
